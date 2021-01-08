@@ -49,7 +49,8 @@ from beans.user import User
 
 # A welcome message to test our server
 from handlers import COMMAND_HANDLERS, handle_invalid_command
-from utils import is_not_blank, get_user_from_request, get_user_input_from_request, get_user_command_from_request
+from utils import is_not_blank, get_user_from_request, get_user_input_from_request, get_user_command_from_request, \
+    get_command_argument
 
 
 @app.route('/')
@@ -66,29 +67,27 @@ def webhook():
         return 'ERROR: No request body', 400
 
     user = get_user_from_request(req_body)
+    command = get_user_command_from_request(req_body)
     user_input = get_user_input_from_request(req_body)
-    commands = get_user_command_from_request(req_body)
 
-    if not commands:
-        return ''
-
-    if is_not_blank(user.id, user_input):
-        __process_telegram_commands(user, commands)
+    if is_not_blank(user.id, command, user_input):
+        __process_telegram_command(user, command, user_input)
 
     return ''
 
 
 # Processes all individual commands found in user input, concatenating them into a single response for user
 # Does not support options for individual commands since we are responding to potentially multiple commands in input
-def __process_telegram_commands(user: User, commands):
-    individual_responses = filter(is_not_blank, map(__process_individual_telegram_command, commands))
-    response = "\n---\n".join(individual_responses)
+def __process_telegram_command(user: User, command, user_input):
+    if is_not_blank(command):
+        command_argument = get_command_argument(user_input, command)
+        response = COMMAND_HANDLERS.get(command, handle_invalid_command)(command_argument)
 
-    send_message(user, ", ".join(commands), response)
+        send_message(user, command, response)
 
 
 def __process_individual_telegram_command(command):
     if is_not_blank(command):
-        return COMMAND_HANDLERS.get(command, handle_invalid_command)(command)
+        return
     else:
         return ''

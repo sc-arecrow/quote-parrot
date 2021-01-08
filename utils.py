@@ -22,6 +22,7 @@ def __get_req_from_name(req_from):
         return ''
 
 
+# Extracts user's input (text or button click) from Telegram request
 def get_user_input_from_request(req_body):
     return req_body.get('message', {}).get('text', '') if 'message' in req_body else ''
 
@@ -30,10 +31,15 @@ def get_user_input_from_request(req_body):
 def get_user_command_from_request(req_body):
     if 'message' in req_body and 'entities' in req_body['message']:
         text = req_body.get('message').get('text')
-        return set(map(lambda entity: text[entity['offset'] + 1: entity['offset'] + entity['length']],
+        commands = set(map(lambda entity: text[entity['offset'] + 1: entity['offset'] + entity['length']],
                        filter(lambda entity: entity['type'] == 'bot_command', req_body['message']['entities'])))
+        return commands.pop()
     else:
-        return {}
+        return ''
+
+
+def get_command_argument(user_input, command):
+    return user_input.lstrip(command).strip()
 
 
 # Checks where one or more string params provided are None or blank
