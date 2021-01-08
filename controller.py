@@ -68,11 +68,9 @@ def webhook():
     user = get_user_from_request(req_body)
     user_input = get_user_input_from_request(req_body)
     commands = get_user_command_from_request(req_body)
-    pprint(commands)
-    pprint(user_input)
 
-    # if is_not_blank(user.id, user_input):
-    #     __process_telegram_commands(user, commands)
+    if is_not_blank(user.id, user_input):
+        __process_telegram_commands(user, commands)
 
     return ''
 
