@@ -39,7 +39,7 @@ def get_user_command_from_request(req_body):
 
 
 def get_command_argument(user_input, command):
-    return user_input.lstrip(command).strip()
+    return user_input.lstrip(f'/{command}').strip()
 
 
 # Checks where one or more string params provided are None or blank
