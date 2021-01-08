@@ -65,6 +65,8 @@ def webhook():
 
     if req_body is None:
         return 'ERROR: No request body', 400
+    
+    pprint(req_body)
 
     user = get_user_from_request(req_body)
     command = get_user_command_from_request(req_body)
