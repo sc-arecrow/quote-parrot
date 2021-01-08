@@ -66,6 +66,8 @@ def webhook():
     if req_body is None:
         return 'ERROR: No request body', 400
 
+    pprint(req_body)
+
     user = get_user_from_request(req_body)
     command = get_user_command_from_request(req_body)
     user_input = get_user_input_from_request(req_body)
@@ -84,10 +86,3 @@ def __process_telegram_command(user: User, command, user_input):
         response = COMMAND_HANDLERS.get(command, handle_invalid_command)(command_argument)
 
         send_message(user, command, response)
-
-
-def __process_individual_telegram_command(command):
-    if is_not_blank(command):
-        return
-    else:
-        return ''

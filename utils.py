@@ -28,7 +28,7 @@ def get_user_input_from_request(req_body):
 
 
 # Extracts user's commands from Telegram request
-def get_user_command_from_request(req_body):
+def parse_user_input_from_request(req_body):
     if 'message' in req_body and 'entities' in req_body['message']:
         text = req_body.get('message').get('text')
         commands = set(map(lambda entity: text[entity['offset'] + 1: entity['offset'] + entity['length']],
