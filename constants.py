@@ -1,4 +1,4 @@
 DEFAULT_GREETING = 'default greeting'
 HELP_MENU = 'help menu'
 
-TELEGRAM_API_TOKEN = "1228166642:AAHjz91B97p2_VqmBPXS2fca-wz1n6Q3yFM"
+TELEGRAM_API_TOKEN = "<insert token>"
